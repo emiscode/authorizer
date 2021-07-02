@@ -2,25 +2,52 @@ import fs from 'fs'
 import readline from 'readline'
 
 let account = new Object()
-let transactions = new Array()
+let records = new Array()
 
 const createAccount = function (request) {
-  if (request.account && account.hasOwnProperty('account')) {
-    if (!account.hasOwnProperty('violations')) account.violations = new Array()
+  if (request.account) {
+    /* ##### account-already-initialized ##### */
+    if (
+      request.account &&
+      account.hasOwnProperty('account') &&
+      account.account['active-card']
+    ) {
+      if (!account.hasOwnProperty('violations'))
+        account.violations = new Array()
 
-    account.violations.push('account-already-initialized')
+      account.violations.push('account-already-initialized')
+      populateRecords(account, request)
+    } else {
+      /* ##### new account ##### */
+      account = { ...request }
 
-    const result = JSON.parse(JSON.stringify(account))
-    transactions.push({ request: request, result: result })
-  } else {
-    account = { ...request }
-    account.violations = new Array()
+      if (!account.hasOwnProperty('violations'))
+        account.violations = new Array()
 
-    const result = JSON.parse(JSON.stringify(account))
-    transactions.push({ request: request, result: result })
+      account.violations = new Array()
+      populateRecords(account, request)
+    }
   }
 }
-const businnesRules = [createAccount]
+
+const authorizeTransaction = function (request) {
+  if (request.transaction) {
+    /* ##### account-not-initialized  ##### */
+    if (!account.account) {
+      account.account = new Object()
+
+      if (!account.hasOwnProperty('violations'))
+        account.violations = new Array()
+
+      account.violations.push('account-not-initialized')
+      populateRecords(account, request)
+    } else {
+      checkLimit(request)
+    }
+  }
+}
+
+const businnesRules = [createAccount, authorizeTransaction]
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -42,8 +69,25 @@ rl.on('line', function (file) {
       })
     })
 
-    transactions.forEach(transaction => {
-      console.log(transaction.result)
+    records.forEach(record => {
+      console.log(record.result)
     })
   })
 })
+
+function populateRecords(account, request) {
+  const result = JSON.parse(JSON.stringify(account))
+  records.push({ request: request, result: result })
+}
+
+function checkLimit(request) {
+  if (account.account['available-limit'] >= request.transaction.amount) {
+    account.account['available-limit'] =
+      account.account['available-limit'] - request.transaction.amount
+  } else {
+    if (!account.hasOwnProperty('violations')) account.violations = new Array()
+
+    account.violations.push('insufficient-limit')
+    populateRecords(account, request)
+  }
+}
