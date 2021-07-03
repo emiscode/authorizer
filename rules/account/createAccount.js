@@ -1,4 +1,4 @@
-import { isAccountActivated } from '../helper/isAccountActivated.js'
+import { isAccountActivated } from '../business/isAccountActivated.js'
 
 export function createAccount(request, account) {
   if (isAccountActivated(account)) {

@@ -1,8 +1,8 @@
-import { hasLimit } from '../helper/hasLimit.js'
-import { isAccountActivated } from '../helper/isAccountActivated.js'
-import { isAccountInitialized } from '../helper/isAccountInitialized.js'
-import { isDoubledTransaction } from '../helper/isDoubledTransaction.js'
-import { isHighFrequencyTransaction } from '../helper/isHighFrequencyTransaction.js'
+import { hasLimit } from '../business/hasLimit.js'
+import { isAccountActivated } from '../business/isAccountActivated.js'
+import { isAccountInitialized } from '../business/isAccountInitialized.js'
+import { isDoubledTransaction } from '../business/isDoubledTransaction.js'
+import { isHighFrequencyTransaction } from '../business/isHighFrequencyTransaction.js'
 
 export function authorizeTransaction(request, account) {
   let isAuthorized = true
