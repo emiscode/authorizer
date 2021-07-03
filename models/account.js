@@ -1,8 +1,5 @@
 export default {
-  account: {
-    ['active-card']: undefined,
-    ['available-limit']: undefined,
-  },
+  account: {},
   violations: [],
   transactions: [],
 }

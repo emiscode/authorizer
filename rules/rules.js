@@ -1,10 +1,7 @@
-import { isCardActive } from './account/isCardActive.js'
+import { createAccount } from './account/createAccount.js'
+import { authorizeTransaction } from './transaction/authorizeTransaction.js'
 
 export default {
-  forAccount: [
-    {
-      isCardActive: isCardActive,
-    },
-  ],
-  forTransaction: [{}],
+  forAccount: [{ createAccount: createAccount }],
+  forTransaction: [{ authorizeTransaction: authorizeTransaction }],
 }
