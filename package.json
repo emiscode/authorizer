@@ -5,7 +5,7 @@
   "main": "authorize.js",
   "scripts": {
     "start": "node authorize.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node authorize.test.js"
   },
   "type": "module",
   "author": "",
