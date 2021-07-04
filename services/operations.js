@@ -24,4 +24,11 @@ export default {
 
     return output()
   },
+  tests: {
+    clean: () => {
+      account.account = {}
+      account.violations = []
+      account.transactions = []
+    },
+  },
 }

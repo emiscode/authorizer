@@ -10,6 +10,7 @@ export function authorizeTransaction(request, account) {
   if (!isAccountInitialized(account)) {
     account.violations.push('account-not-initialized')
     isAuthorized = false
+    return account
   }
 
   if (!isAccountActivated(account)) {
@@ -28,7 +29,7 @@ export function authorizeTransaction(request, account) {
   }
 
   if (isDoubledTransaction(request, account)) {
-    account.violations.push('doubled-transaction')
+    account.violations.push('double-transaction')
     isAuthorized = false
   }
 
